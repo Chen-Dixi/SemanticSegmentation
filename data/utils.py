@@ -37,6 +37,9 @@ def decode_segmap(label_mask, dataset, plot=False):
         r[label_mask == ll] = label_colours[ll, 0]
         g[label_mask == ll] = label_colours[ll, 1]
         b[label_mask == ll] = label_colours[ll, 2]
+        r[label_mask == 255] = 0
+        g[label_mask == 255] = 0
+        b[label_mask == 255] = 0
     rgb = np.zeros((label_mask.shape[0], label_mask.shape[1], 3))
     rgb[:, :, 0] = r / 255.0
     rgb[:, :, 1] = g / 255.0

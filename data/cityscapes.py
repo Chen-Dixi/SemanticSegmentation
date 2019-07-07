@@ -31,8 +31,10 @@ class CityscapesDataset(data.Dataset):
         self.image_dir = os.path.join(self.root, 'leftImg8bit', self.split)
         self.annotation_dir = os.path.join(self.root, 'gtFine', self.split)
 
+
         searchLeftImg8bit   = os.path.join( self.image_dir , "*" , "*_leftImg8bit.png" )
 
+        # 这些图片png文件记录了语义分割任务的监督信息
         filesImage = glob.glob( searchLeftImg8bit )
         filesImage.sort()
 
@@ -41,10 +43,10 @@ class CityscapesDataset(data.Dataset):
             raise RuntimeError("No files for split=[%s] found in %s" % (split, self.image_dir))
 
 
-
     def __getitem__(self, index):
         
         path = self.files[index]
+        #label图片在另一个文件夹位置
         labelImg_file = os.path.join(self.annotation_dir,
                                 path.split(os.sep)[-2],
                                 os.path.basename(path)[:-15] + 'gtFine_labelTrainIds.png')
@@ -56,8 +58,6 @@ class CityscapesDataset(data.Dataset):
         sample = {'image': img, 'label': mask}
         if self.transform is not None:
             sample = self.transform(sample)
-        
-            
 
         return sample['image'], sample['label']
 
@@ -75,5 +75,7 @@ class CityscapesDataset(data.Dataset):
             tr.FixedResize(size=513),
             tr.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
             tr.ToTensor()])
-       
     
+    
+
+

@@ -28,12 +28,17 @@ class CityscapesTestCase(unittest.TestCase):
     def test_img8bit_mask(self):
         DATA_DIR='/home/apex/chendixi/Experiment/data/CityScapes'
         dataset = CityscapesDataset(DATA_DIR,split='train')
-        dataloader = DataLoader(dataset, batch_size=2, shuffle=True)
+        dataloader = DataLoader(dataset, batch_size=2, shuffle=False)
         it = iter(dataloader)
         images,masks = it.next()
         #masks 并没有被除以255
+        mean=(0.485, 0.456, 0.406)
+        std=(0.229, 0.224, 0.225)
         for i in range(images.size()[0]):
-            vutils.save_image(images[i],"image"+ str(i) +".png")
+            mean = torch.tensor(mean, dtype=torch.float32)
+            std = torch.tensor(std, dtype=torch.float32)
+            image = images[i].mul(std[:, None, None]).add(mean[:, None, None])
+            vutils.save_image(image,"image"+ str(i) +".png")
             mask = masks[i].numpy()
 
             tmp = np.array(mask).astype(np.uint8)
@@ -41,7 +46,6 @@ class CityscapesTestCase(unittest.TestCase):
             segmap = torch.from_numpy(segmap).float().permute(2, 0, 1)
             vutils.save_image(segmap,"label"+ str(i) +".png")
 
-    
     def save_mask(self):
         DATA_DIR='/home/apex/chendixi/Experiment/data/CityScapes'
         dataset = CityscapesDataset(DATA_DIR,split='train')
