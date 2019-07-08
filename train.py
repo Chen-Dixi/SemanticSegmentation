@@ -11,6 +11,7 @@ from dixitool.pytorch.module import functional as F
 output_device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 def train(net, criterion, train_dataloader, optimizer, epoch):
+    print("training")
     net.train()
     train_loss = 0.0
     for i, sample in tqdm(enumerate(train_dataloader)):
@@ -26,14 +27,17 @@ def train(net, criterion, train_dataloader, optimizer, epoch):
         optimizer.step()
 
         train_loss += loss.item()
+    print("epoch {epoch} loss:{loss}".format(epoch=epoch,loss=train_loss))
 
-best_iou = 0.3
+best_iou = 0.0
 
-def validation(net, criterion, val_dataloader, optimizer, metric, epoch):
+
+def validation(net, criterion, val_dataloader, optimizer, mIoU_metric, epoch):
+    print("evaluating")
     net.eval()
     test_loss = 0.0
-    metric.reset()
-
+    mIoU_metric.reset()
+    best_miou = 0.0
     for i, sample in tqdm(enumerate(val_dataloader)):
         images, targets = sample
         images = images.to(output_device)
@@ -42,11 +46,15 @@ def validation(net, criterion, val_dataloader, optimizer, metric, epoch):
             outputs = net(images)
         loss = criterion(outputs, targets)
         test_loss += loss.item()
-        metric.update(outputs, targets)
+        #每个batch更新一次metric
+        mIoU_metric.update(outputs, targets)
 
-    miou = metric.get()
+    miou = mIoU_metric.get()
 
-    
+    if miou > best_miou:
+        best_miou = miou
+        F.save_model('checkpoints', 'mIoU[%.2f]' % best_miou, net)
+
 
 
 
