@@ -1,0 +1,15 @@
+data:
+  num_classes: 19
+  dataset: 'cityscapes'
+  batch_size: 8
+  data_dir: '/home/apex/chendixi/Experiment/data/CityScapes'
+model:
+  backbone: 'mobilenetv2'
+  model: 'deeplabv3plus'
+train:
+  lr: 0.01
+  epochs: 200
+  momentum: 0.9
+  num_gpus: 2
+  eval_interval: 2
+  weight_decay: 0.0005

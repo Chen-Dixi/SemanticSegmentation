@@ -27,7 +27,7 @@ class BackboneBaseModule(nn.Module):
             self.strides[3] = 8
             self.strides[4] = 8
 
-    def change_dilation(self, params):
+    def change_dilation(self, params): # 改变dilation并不会改变 spatial resolution
         assert isinstance(params, (tuple, list))
         assert len(params) == 5
         self._change_stage_dilation(self.stage0, params[0])

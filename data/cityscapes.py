@@ -8,7 +8,7 @@ import numpy as np
 import sys, glob, os
 sys.path.append("/home/apex/chendixi/Experiment/data/CityScapes")
 import cityscapesscripts.helpers.labels as CityscapesLabels
-import custom_transforms as tr
+from . import custom_transforms as tr
 
 class CityscapesDataset(data.Dataset):
 
@@ -16,6 +16,10 @@ class CityscapesDataset(data.Dataset):
 
     #split in [train, val, test]
     def __init__(self,root, split="train",transform=None):
+        assert split in [
+            'train', 'val', 'test'
+        ]
+        
         self.root = root
         self.split = split
     
@@ -72,7 +76,7 @@ class CityscapesDataset(data.Dataset):
     def default_transform(self):
         self.transform = transforms.Compose([
             tr.RandomHorizontalFlip(),
-            tr.FixedResize(size=513),
+            tr.FixedResize(size=512),
             tr.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
             tr.ToTensor()])
     

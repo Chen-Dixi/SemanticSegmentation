@@ -25,7 +25,7 @@ class CityscapesTestCase(unittest.TestCase):
         image,mask = it.next()
         # file = dataset.files[0]
 
-    def test_img8bit_mask(self):
+    def save_img8bit_mask(self):
         DATA_DIR='/home/apex/chendixi/Experiment/data/CityScapes'
         dataset = CityscapesDataset(DATA_DIR,split='train')
         dataloader = DataLoader(dataset, batch_size=2, shuffle=False)
@@ -61,6 +61,15 @@ class CityscapesTestCase(unittest.TestCase):
         segmap = np.array(segmap * 255).astype(np.uint8)
         im = Image.fromarray(segmap)
         im.save("label.png")
+
+    def test_output_size(self):
+        DATA_DIR='/home/apex/chendixi/Experiment/data/CityScapes'
+        dataset = CityscapesDataset(DATA_DIR,split='train')
+        dataloader = DataLoader(dataset, batch_size=2, shuffle=False)
+        it = iter(dataloader)
+        images,masks = it.next()
+        #masks 并没有被除以255
+        print(images.size()) #torch.Size([2, 3, 513, 513])
 
 if __name__ == '__main__':
     unittest.main()

@@ -30,6 +30,21 @@ class SegBaseModule(nn.Module):
                                  strict=True):
         self.backbone.load_parameters(filename, map_location, strict)
 
+    def to_device_(self, num_gpus):
+        cpu_device = torch.device("cpu")
+        one_gpu_device = torch.device("cuda:0")
+        if num_gpus == 0:
+            self.to(cpu_device)
+            return self
+        elif num_gpus == 1:
+            self.to(one_gpu_device)
+        elif num_gpus > 1:
+            self.to(one_gpu_device)
+            return nn.DataParallel(self, list(range(num_gpus)))
+        return self
+
+
+
     def reset_classes(self, num_classes):
         '''
         Should be overridden by all subclasses
