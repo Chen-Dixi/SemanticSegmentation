@@ -8,8 +8,11 @@ model:
   model: 'deeplabv3plus'
 train:
   lr: 0.01
-  epochs: 200
+  epochs: 50
   momentum: 0.9
   num_gpus: 2
   eval_interval: 2
   weight_decay: 0.0005
+  scheduler_step_size: 2
+val:
+  visualize_batch_index: 0
