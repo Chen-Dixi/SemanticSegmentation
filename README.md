@@ -15,7 +15,7 @@ an Awesome PyTorch's Semantic Segmentation Toolbox: [BLSeg]
 
 ## Visualization
 
-实践设备有限，现在只运行了4个epoch看结果，主要目的是上手语义分割
+只运行了4个epoch看结果，主要目的是上手语义分割
 
 | | Original Image  |  Predict Mask  |
 | :--: | :------------: | :------------: |
