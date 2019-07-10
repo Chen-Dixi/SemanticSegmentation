@@ -62,7 +62,7 @@ class CityscapesTestCase(unittest.TestCase):
         im = Image.fromarray(segmap)
         im.save("label.png")
 
-    def test_output_size(self):
+    def print_output_size(self):
         DATA_DIR='/home/apex/chendixi/Experiment/data/CityScapes'
         dataset = CityscapesDataset(DATA_DIR,split='train')
         dataloader = DataLoader(dataset, batch_size=2, shuffle=False)
@@ -70,6 +70,19 @@ class CityscapesTestCase(unittest.TestCase):
         images,masks = it.next()
         #masks 并没有被除以255
         print(images.size()) #torch.Size([2, 3, 513, 513])
+
+    def test_save_image(self):
+        DATA_DIR='/home/apex/chendixi/Experiment/data/CityScapes'
+        dataset = CityscapesDataset(DATA_DIR,split='val')
+        dataloader = DataLoader(dataset, batch_size=8, shuffle=False)
+        it = iter(dataloader)
+        images,masks = it.next()
+        mean=(0.485, 0.456, 0.406)
+        std=(0.229, 0.224, 0.225)
+        mean = torch.tensor(mean, dtype=torch.float32)
+        std = torch.tensor(std, dtype=torch.float32)
+        image = images[1].mul(std[:, None, None]).add(mean[:, None, None])
+        vutils.save_image(image,"image1" +".png")
 
 if __name__ == '__main__':
     unittest.main()

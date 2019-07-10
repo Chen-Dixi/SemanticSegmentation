@@ -43,7 +43,8 @@ def validation(net, criterion, val_dataloader, optimizer, mIoU_metric, lr_schedu
     net.eval()
     test_loss = 0.0
     mIoU_metric.reset()
-  
+    global best_miou
+    
     for i, sample in tqdm(enumerate(val_dataloader)):
         images, targets = sample
         images = images.to(output_device)
