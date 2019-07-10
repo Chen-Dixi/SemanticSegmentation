@@ -28,7 +28,7 @@ class CityscapesDataset(data.Dataset):
         
 
         if transform is None:
-            self.default_transform()
+            self.default_transform(split)
 
 
         #leftImg8bit图片地址, image_dir已经指定了train，val，test
@@ -73,13 +73,50 @@ class CityscapesDataset(data.Dataset):
             img = Image.open(f)
             return img.convert('RGB')
 
-    def default_transform(self):
-        self.transform = transforms.Compose([
+    def default_transform(self, split):
+        self.transform = self._get_transform(split)
+        # transforms.Compose([
+        #     tr.RandomHorizontalFlip(),
+        #     tr.FixedResize(size=512),
+        #     tr.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
+        #     tr.ToTensor()])
+    
+    def _get_transform(self, split):
+        if split == 'train':
+            return self.transform_tr()
+        elif split == 'val':
+            return self.transform_val()
+        elif split == 'test':
+            return self.transform_ts()
+        else:
+            raise NotImplementedError
+
+    def transform_tr(self):
+        composed_transforms = transforms.Compose([
             tr.RandomHorizontalFlip(),
+            tr.FixedResize(size=512),
+            tr.RandomGaussianBlur(),
+            tr.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
+            tr.ToTensor()])
+
+        return composed_transforms
+
+    def transform_val(self):
+
+        composed_transforms = transforms.Compose([
             tr.FixedResize(size=512),
             tr.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
             tr.ToTensor()])
-    
-    
+
+        return composed_transforms
+
+    def transform_ts(self):
+
+        composed_transforms = transforms.Compose([
+            tr.FixedResize(size=512),
+            tr.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
+            tr.ToTensor()])
+
+        return composed_transforms
 
 
