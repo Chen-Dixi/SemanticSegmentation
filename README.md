@@ -19,8 +19,8 @@ an Awesome PyTorch's Semantic Segmentation Toolbox: [BLSeg]
 
 | | Original Image  |  Predict Mask  |
 | :--: | :------------: | :------------: |
-|Epoch:1|   soon   | ![predict1] |
-|Epoch:4|   soon   | ![predict2] |
+|Epoch:1|   ![image]   | ![predict1] |
+|Epoch:4|   ![image]   | ![predict2] |
 
 
 
@@ -31,3 +31,4 @@ an Awesome PyTorch's Semantic Segmentation Toolbox: [BLSeg]
 [BLSeg]:https://github.com/linbo0518/BLSeg
 [dixitool]:https://github.com/Chen-Dixi/dixitool
 [cityscapesscripts]:https://github.com/mcordts/cityscapesScripts
+[image]:assets/result/frankfurt_000000_000576_leftImg8bit.png
